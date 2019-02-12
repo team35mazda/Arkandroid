@@ -7,22 +7,23 @@ import android.graphics.Point;
 import android.graphics.Rect;
 
 import java.util.concurrent.ThreadLocalRandom;
+import static java.lang.Math.round;
 
 public class Level {
 
     private Block[][] assembly;
     private int levelNumber;
-    private static int LEVEL_WIDTH = 7;
-    private static int LEVEL_HEIGHT = 4;
+    //private static int LEVEL_WIDTH = 7;
+    private int LEVEL_WIDTH = 0;
+    private static int LEVEL_HEIGHT = 8;
     private static int BLOCK_WIDTH = 150;
     private static int BLOCK_HEIGHT = 50;
 
     public Level(int levelNumber) {
         this.levelNumber = levelNumber;
-        assembly = new Block[LEVEL_WIDTH][LEVEL_HEIGHT];
 
-        constructRandomLevel();
-
+        ////décallé la construction du tableau jusqu'à ce qu'on ait la taille du canvas... donc dans le 1ier draw..
+        //constructRandomLevel();
     }
 
     private void constructRandomLevel(){
@@ -45,6 +46,14 @@ public class Level {
     }
 
     public void draw(Canvas canvas){
+
+        //décallé la construction du tableau jusqu'à ce qu'on ait la taille du canvas... donc ici..
+        if (assembly == null){
+            this.LEVEL_WIDTH = round(canvas.getWidth()/BLOCK_WIDTH);
+            assembly = new Block[this.LEVEL_WIDTH][LEVEL_HEIGHT];
+            constructRandomLevel();
+        }
+
         Paint paint = new Paint();
         for (int y=0;y<LEVEL_HEIGHT;y++){
             for (int x=0;x<LEVEL_WIDTH;x++){
