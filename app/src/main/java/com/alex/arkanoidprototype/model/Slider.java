@@ -15,6 +15,10 @@ public class Slider implements GameObject {
         this.color = color;
     }
 
+    public Rect getRect() {
+        return rectangle;
+    }
+
     @Override
     public void draw(Canvas canvas) {
         Paint paint = new Paint();

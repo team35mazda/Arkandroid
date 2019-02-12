@@ -18,11 +18,12 @@ public class Block implements GameObject {
     }
 
     public boolean ballHit(Ball ball){
-        if (rectangle.contains((int)ball.getOval().left, (int)ball.getOval().top)
+/*        if (rectangle.contains((int)ball.getOval().left, (int)ball.getOval().top)
                 || rectangle.contains((int)ball.getOval().right,(int)ball.getOval().top)
                 || rectangle.contains((int)ball.getOval().left, (int)ball.getOval().bottom)
                 || rectangle.contains((int)ball.getOval().right,(int)ball.getOval().bottom))
                 return true;
+*/
         return false;
 
     }

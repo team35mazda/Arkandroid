@@ -11,6 +11,9 @@ import android.view.SurfaceHolder;
 
 import com.alex.arkanoidprototype.model.Level;
 import com.alex.arkanoidprototype.model.Slider;
+import com.alex.arkanoidprototype.model.Ball;
+
+import static java.lang.Math.round;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private MainThread thread;
@@ -18,6 +21,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private Slider slider;
     private Point sliderPoint;
     private Level level;
+    private Ball ball;
+    private Point ballPoint;
+
+    private static int SliderStartPosX = 500;
+    private static int SliderStartPosY = 1200;
 
     public GamePanel(Context context){
         super(context);
@@ -26,10 +34,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         thread = new MainThread(getHolder(), this);
 
-         slider = new Slider(new Rect(50,50,200,100), Color.rgb(255,0,0));
-         sliderPoint = new Point(500,1200);
+        slider = new Slider(new Rect(50,50,200,100), Color.rgb(255,0,0));
+        sliderPoint = new Point(SliderStartPosX,SliderStartPosY);
 
-         level = new Level(1);
+        level = new Level(1);
+        int sliderCenter;
+        sliderCenter = slider.getRect().right - slider.getRect().left; //Size du slider
+        sliderCenter = round(sliderCenter / 2) - Ball.rayon;
+
+        ballPoint = new Point(sliderCenter, SliderStartPosY-Ball.rayon);
+        ball = new Ball(ballPoint, Color.rgb(102,135,255)); //
 
         setFocusable(true);
     }
@@ -67,6 +81,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
                 sliderPoint.set((int)event.getX(),(int)event.getY());
+
+                // ballPoint.set((int)event.getX(),(int)event.getY());  // pour débug, je positionne la balle au touchpoint...
         }
         //return super.onTouchEvent(event);
         return true;
@@ -74,6 +90,31 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update(){
         slider.update(sliderPoint);
+        ball.update(ballPoint);
+    }
+
+    private void detect_collision(Canvas canvas){
+        Point ballpoint;
+        ballpoint = ball.getcercle();
+
+        if (ball.getdirectionX()) {
+            if (ballpoint.x<ball.getrayon()) ball.setdirectionX(false);
+        }
+        else{    if (ballpoint.x+ball.getrayon() > canvas.getWidth()) ball.setdirectionX(true);
+        }
+
+        if (ball.getdirectionY()) {
+            if (ballpoint.y<ball.getrayon()) ball.setdirectionY(false);
+        }
+        else{
+            if (ballpoint.y+ball.getrayon() >= slider.getRect().top){
+                if (ballpoint.x>=slider.getRect().left && ballpoint.x<=slider.getRect().right){
+                    ball.setdirectionY(true);
+                }else {if (ballpoint.y + ball.getrayon() > canvas.getHeight()) ball.setdirectionY(true);
+                }
+            }
+        }
+
     }
 
     @Override
@@ -84,6 +125,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         slider.draw(canvas);
         level.draw(canvas);
+        ball.draw(canvas);
+
+        detect_collision(canvas);
     }
 
 }
