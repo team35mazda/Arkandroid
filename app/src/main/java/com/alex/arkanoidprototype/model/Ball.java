@@ -7,12 +7,18 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Color;
 import com.alex.arkanoidprototype.model.Slider;
+import android.util.Log;
 
 
 public class Ball implements GameObject {
-    public static int rayon = 30;
-    private static int MouvementX = 3;
-    private static int MouvementY = 3;
+
+    private static int def_rayon = 30;
+    private static int def_MouvementX = 3;
+    private static int def_MouvementY = 8;
+
+    private int rayon = def_rayon;
+    private int MouvementX = def_MouvementX;
+    private int MouvementY = def_MouvementY;
 
     private Point cercle;
     private Paint paint;
@@ -27,21 +33,40 @@ public class Ball implements GameObject {
         directionY = true;
     }
 
-    public Point getcercle() {
-        return cercle;
+//    ----------
+    public Rect getcercle() { return new Rect( cercle.x-rayon, cercle.y-rayon, cercle.x+rayon, cercle.y+rayon);  }
+    public Point getpoint() { return cercle; }
+
+    public Rect getRect() { return new Rect( cercle.x-rayon, cercle.y-rayon, cercle.x+rayon, cercle.y+rayon);  }
+    public int getrayon() { return rayon; }
+
+    public int getMouvementX() {
+        return MouvementX;
+    }
+    public void setMouvementX(int val) { MouvementX = val; }
+
+    public int getMouvementY() {
+        return MouvementY;
     }
 
-    public int getrayon() {
-        return rayon;
+    public int getdef_MouvementX() {
+        return def_MouvementX;
     }
 
     public boolean getdirectionX() {
         return directionX;
     }
-    public void setdirectionX(boolean val) { directionX = val; }
-    public boolean getdirectionY() { return directionY; }
-    public void setdirectionY(boolean val) { directionY = val; }
-
+    public void setdirectionX(boolean val) {
+        this.directionX = val;
+        Log.v("Michel", "setdirectionX to " + String.valueOf(val));
+    }
+    public boolean getdirectionY() {
+        return directionY;
+    }
+    public void setdirectionY(boolean val) {
+        this.directionY = val;
+        Log.v("Michel", "setdirectionY to " + String.valueOf(val));
+    }
 
     @Override
     public void draw(Canvas canvas) {
@@ -56,24 +81,29 @@ public class Ball implements GameObject {
     private void movetheball(Point point){
         int x;
         int y;
+        String txt="";
 
-        if (directionX) {
+        if (this.directionX == true) {
             x = point.x - MouvementX;
         }else{
             x = point.x + MouvementX;
         };
-        if (directionY) {
+        if (this.directionY == true) {
             y = point.y - MouvementY;
         }else{
             y = point.y + MouvementY;
         };
 
+        txt = "   Ball move  FROM (" + String.valueOf(point.x) + "," + String.valueOf(point.y) + ")  TO (";
         point.set(x,y);
+        txt = txt  + String.valueOf(x) + "," + String.valueOf(y) + ")";
+        Log.v("Michel", txt);
     }
 
     public void update(Point point){
         movetheball(point);
         cercle.set(point.x, point.y);
+        //Log.v("Michel", "                               Vraiement ? ( "+ String.valueOf(point.x) + "," + String.valueOf(point.y) + ")");
     }
 
 }

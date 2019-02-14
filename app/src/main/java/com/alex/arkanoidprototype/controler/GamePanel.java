@@ -5,10 +5,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
+import com.alex.arkanoidprototype.model.BlockHit;
 import com.alex.arkanoidprototype.model.Level;
 import com.alex.arkanoidprototype.model.Slider;
 import com.alex.arkanoidprototype.model.Ball;
@@ -39,13 +41,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         level = new Level(1);
         int sliderCenter;
+        //TODO: mettre le rayon comme variable système
+        int ballrayon = 30;
         sliderCenter = slider.getRect().right - slider.getRect().left; //Size du slider
-        sliderCenter = round(sliderCenter / 2) - Ball.rayon;
+        sliderCenter = round(sliderCenter / 2) - ballrayon;
 
-        ballPoint = new Point(sliderCenter, SliderStartPosY-Ball.rayon);
+        ballPoint = new Point(sliderCenter, SliderStartPosY-ballrayon);
         ball = new Ball(ballPoint, Color.rgb(102,135,255)); //
 
         setFocusable(true);
+
+        Log.v("Michel", "----- NEW START -----");
+
     }
 
     @Override
@@ -95,24 +102,60 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private void detect_collision(Canvas canvas){
         Point ballpoint;
-        ballpoint = ball.getcercle();
+        ballpoint = ball.getpoint();
 
-        if (ball.getdirectionX()) {
-            if (ballpoint.x<ball.getrayon()) ball.setdirectionX(false);
-        }
-        else{    if (ballpoint.x+ball.getrayon() > canvas.getWidth()) ball.setdirectionX(true);
-        }
+        //------ Tappe à gauche ou a droite de l'écran ------
+        if ((ballpoint.x<ball.getrayon()) || (ballpoint.x+ball.getrayon() > canvas.getWidth())) ball.setdirectionX(!ball.getdirectionX());
 
-        if (ball.getdirectionY()) {
-            if (ballpoint.y<ball.getrayon()) ball.setdirectionY(false);
-        }
-        else{
-            if (ballpoint.y+ball.getrayon() >= slider.getRect().top){
-                if (ballpoint.x>=slider.getRect().left && ballpoint.x<=slider.getRect().right){
-                    ball.setdirectionY(true);
-                }else {if (ballpoint.y + ball.getrayon() > canvas.getHeight()) ball.setdirectionY(true);
+        //------ Tappe en haut ou en bas de l'écran ------
+        //TODO:enlever le riccochet avec le bas pour faire perdre une vie
+        if ((ballpoint.y<ball.getrayon()) || (ballpoint.y + ball.getrayon() > canvas.getHeight())) ball.setdirectionY(!ball.getdirectionY());
+
+        //------ Tappe sur le slider ------
+        //On est a la hauteur du slider ?
+        if (ballpoint.y+ball.getrayon() >= slider.getRect().top) {
+            //On est sur le slider ?
+            if (ballpoint.x >= slider.getRect().left && ballpoint.x <= slider.getRect().right)
+                ball.setdirectionY(true);
+            // Correction du mouvement selon l'arriver sur la plaque, le rebond sur le Slider, on doit changer la direction de la balle
+            //    7 Emplacements    La base : pareil au rebond sur un mur, on rebondit en changeant d'axe seulement
+            //    -------------     A : 2 x la correction du MouvementX (soit du côté gauche, sinon droit)
+            //    |A|B| C |B|A|     B : 1 x la correction du MouvementX (soit du côté gauche, sinon droit)
+            //    -------------     C : , on rebondit en changeant d'axe
+            int SeptiemeDePlaque = round((slider.getRect().right - slider.getRect().left) / 7);
+            int Position = ballpoint.x - slider.getRect().left;
+            if (Position <= SeptiemeDePlaque) {
+                ball.setMouvementX(ball.getMouvementX() - 2 * ball.getdef_MouvementX()); // A de gauche
+            }
+            else {
+                if (Position <= SeptiemeDePlaque * 2) {
+                    ball.setMouvementX(ball.getMouvementX() - ball.getdef_MouvementX()); // B de gauche
+                }
+                else {
+                    if (Position <= SeptiemeDePlaque * 5) {
+                        ball.setMouvementX(ball.getMouvementX()); // C... le centre Aucun changement de MouvementX
+                    }
+                    else {
+                        if (Position <= SeptiemeDePlaque * 7) {
+                            ball.setMouvementX(ball.getMouvementX() + ball.getdef_MouvementX()); // B de droite
+                        }
+                        else {
+                                ball.setMouvementX(ball.getMouvementX() + 2 * ball.getdef_MouvementX()); // A de droite
+                        }
+                    }
                 }
             }
+        }
+
+        //------Tappe sur un block ------
+        BlockHit bhit = level.DetectBlockHit(ballPoint, ball.getdirectionX(), ball.getdirectionY(), ball.getMouvementX(), ball.getMouvementY(), ball.getrayon());
+        if (bhit.getHitByY()) {
+            if (bhit.HitByTop ) ball.setdirectionY(true);
+            if (bhit.HitByBottom ) ball.setdirectionY(false);
+        }
+        if (bhit.getHitByX()){
+            if (bhit.HitByLeft ) ball.setdirectionX(true);
+            if (bhit.HitByRigth ) ball.setdirectionX(false);
         }
 
     }
