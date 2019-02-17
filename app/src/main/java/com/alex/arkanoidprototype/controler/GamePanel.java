@@ -26,6 +26,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private Ball ball;
     private Point ballPoint;
 
+    private static int LevelStartPosY = 100;
     private static int SliderStartPosX = 500;
     private static int SliderStartPosY = 1200;
 
@@ -36,7 +37,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         thread = new MainThread(getHolder(), this);
 
-        slider = new Slider(new Rect(50,50,200,100), Color.rgb(255,0,0));
+        slider = new Slider(new Rect(0,0,200,75), Color.rgb(255,0,0));
         sliderPoint = new Point(SliderStartPosX,SliderStartPosY);
 
         level = new Level(1);
@@ -113,34 +114,31 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         //------ Tappe sur le slider ------
         //On est a la hauteur du slider ?
-        if (ballpoint.y+ball.getrayon() >= slider.getRect().top) {
+        if ((ballpoint.y+ball.getrayon() >= slider.getRect().top) && (ballpoint.y-ball.getrayon() < slider.getRect().top)) {
             //On est sur le slider ?
-            if (ballpoint.x >= slider.getRect().left && ballpoint.x <= slider.getRect().right)
+            if (ballpoint.x >= slider.getRect().left && ballpoint.x <= slider.getRect().right) {
                 ball.setdirectionY(true);
-            // Correction du mouvement selon l'arriver sur la plaque, le rebond sur le Slider, on doit changer la direction de la balle
-            //    7 Emplacements    La base : pareil au rebond sur un mur, on rebondit en changeant d'axe seulement
-            //    -------------     A : 2 x la correction du MouvementX (soit du côté gauche, sinon droit)
-            //    |A|B| C |B|A|     B : 1 x la correction du MouvementX (soit du côté gauche, sinon droit)
-            //    -------------     C : , on rebondit en changeant d'axe
-            int SeptiemeDePlaque = round((slider.getRect().right - slider.getRect().left) / 7);
-            int Position = ballpoint.x - slider.getRect().left;
-            if (Position <= SeptiemeDePlaque) {
-                ball.setMouvementX(ball.getMouvementX() - 2 * ball.getdef_MouvementX()); // A de gauche
-            }
-            else {
-                if (Position <= SeptiemeDePlaque * 2) {
-                    ball.setMouvementX(ball.getMouvementX() - ball.getdef_MouvementX()); // B de gauche
-                }
-                else {
-                    if (Position <= SeptiemeDePlaque * 5) {
-                        ball.setMouvementX(ball.getMouvementX()); // C... le centre Aucun changement de MouvementX
-                    }
-                    else {
-                        if (Position <= SeptiemeDePlaque * 7) {
-                            ball.setMouvementX(ball.getMouvementX() + ball.getdef_MouvementX()); // B de droite
-                        }
-                        else {
+                // Correction du mouvement selon l'arriver sur la plaque, le rebond sur le Slider, on doit changer la direction de la balle
+                //    7 Emplacements    La base : pareil au rebond sur un mur, on rebondit en changeant d'axe seulement
+                //    -------------     A : 2 x la correction du MouvementX (soit du côté gauche, sinon droit)
+                //    |A|B| C |B|A|     B : 1 x la correction du MouvementX (soit du côté gauche, sinon droit)
+                //    -------------     C : , on rebondit en changeant d'axe
+                int SeptiemeDePlaque = round((slider.getRect().right - slider.getRect().left) / 7);
+                int Position = ballpoint.x - slider.getRect().left;
+                if (Position <= SeptiemeDePlaque) {
+                    ball.setMouvementX(ball.getMouvementX() - 2 * ball.getdef_MouvementX()); // A de gauche
+                } else {
+                    if (Position <= SeptiemeDePlaque * 2) {
+                        ball.setMouvementX(ball.getMouvementX() - ball.getdef_MouvementX()); // B de gauche
+                    } else {
+                        if (Position <= SeptiemeDePlaque * 5) {
+                            ball.setMouvementX(ball.getMouvementX()); // C... le centre Aucun changement de MouvementX
+                        } else {
+                            if (Position <= SeptiemeDePlaque * 7) {
+                                ball.setMouvementX(ball.getMouvementX() + ball.getdef_MouvementX()); // B de droite
+                            } else {
                                 ball.setMouvementX(ball.getMouvementX() + 2 * ball.getdef_MouvementX()); // A de droite
+                            }
                         }
                     }
                 }

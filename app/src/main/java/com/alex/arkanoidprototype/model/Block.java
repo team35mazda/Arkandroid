@@ -39,22 +39,22 @@ public class Block implements GameObject {
 
                 //
 
-        if ((!bhit.getHit()) && (ballCoord.x >= rectangle.left) && (ballCoord.x <= rectangle.right)) {
-            if ((ballCoord.y - rayon <= rectangle.bottom) && (ballCoord.y + rayon - MouvementY > rectangle.bottom)) {
+        if ((!bhit.getHit()) && (ballCoord.x-rayon >= rectangle.left) && (ballCoord.x+rayon <= rectangle.right)) {
+            if ((ballCoord.y - rayon <= rectangle.bottom) && (ballCoord.y - MouvementY > rectangle.bottom)) {
                 bhit.setHitByY(true);
                 bhit.HitByBottom = true;
             }
-            if ((ballCoord.y + rayon >= rectangle.top) && (ballCoord.y - rayon + MouvementY < rectangle.top)) {
+            if ((ballCoord.y + rayon >= rectangle.top) && (ballCoord.y + MouvementY < rectangle.top)) {
                 bhit.setHitByY(true);
                 bhit.HitByTop = true;
             }
         }
-        if ((!bhit.getHit()) && (ballCoord.y >= rectangle.bottom) && (ballCoord.y <= rectangle.top)){
-            if ((ballCoord.x + rayon >= rectangle.left) && (ballCoord.x - rayon + MouvementX < rectangle.left)) {
+        if ((!bhit.getHit()) && (ballCoord.y-rayon >= rectangle.top) && (ballCoord.y+rayon <= rectangle.bottom)){
+            if ((ballCoord.x + rayon >= rectangle.left) && (ballCoord.x + MouvementX < rectangle.left)) {
                 bhit.setHitByX(true);
                 bhit.HitByLeft = true;
             }
-            if ((ballCoord.x - rayon >= rectangle.left) && (ballCoord.x + rayon -MouvementX > rectangle.right)) {
+            if ((ballCoord.x - rayon <= rectangle.right) && (ballCoord.x - MouvementX > rectangle.right)) {
                 bhit.setHitByX(true);
                 bhit.HitByRigth= true;
             }

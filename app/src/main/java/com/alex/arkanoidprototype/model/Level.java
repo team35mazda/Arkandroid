@@ -11,14 +11,17 @@ import android.util.Log;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static java.lang.Math.floor;
+import static java.lang.Math.round;
 
 
 public class Level {
 
     private Block[][] assembly;
     private int levelNumber;
-    private static int def_LEVEL_WIDTH = 15;
-    private static int def_LEVEL_HEIGHT = 8;
+    private int startPosition = 200;
+
+    private static int def_LEVEL_WIDTH = 10;
+    private static int def_LEVEL_HEIGHT = 7;
     private static int def_BLOCK_WIDTH = 150;
     private static int def_BLOCK_HEIGHT = 50;
     private int LEVEL_WIDTH = def_LEVEL_WIDTH;
@@ -39,7 +42,7 @@ public class Level {
 
         for (int y=0;y<LEVEL_HEIGHT;y++){
             for (int x=0;x<LEVEL_WIDTH;x++){
-                point.set((x*BLOCK_WIDTH)+75,(y*BLOCK_HEIGHT)+200);
+                point.set((x*BLOCK_WIDTH)+75,(y*BLOCK_HEIGHT)+startPosition);
                 int r = ThreadLocalRandom.current().nextInt(0, 254 + 1);
                 int g = ThreadLocalRandom.current().nextInt(0, 254 + 1);
                 int b = ThreadLocalRandom.current().nextInt(0, 254 + 1);
@@ -57,8 +60,11 @@ public class Level {
         //décallé la construction du tableau jusqu'à ce qu'on ait la taille du canvas... donc ici..
         //Change la largeur des blocks pour afficher X block de large (à définir) et qui prend le maximum de place à l'écran
         if (assembly == null){
-            this.BLOCK_WIDTH = (int)floor(canvas.getWidth()/LEVEL_WIDTH); //Arrondi par le bas pour être plus petit que l'écran sans déborder
+            this.BLOCK_WIDTH = (int)round(canvas.getWidth()/LEVEL_WIDTH) + 1; //Arrondi par le bas pour être plus petit que l'écran sans déborder
+            this.BLOCK_HEIGHT = (int)round(this.BLOCK_WIDTH/3);  // hauteur = arrondi à 1/3 de la largeur
             assembly = new Block[this.LEVEL_WIDTH][LEVEL_HEIGHT];
+
+            this.startPosition = (int)round(canvas.getHeight()*0.1); // ON arriche à 10% de la hauteur
             constructRandomLevel();
         }
 

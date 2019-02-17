@@ -13,8 +13,8 @@ import android.util.Log;
 public class Ball implements GameObject {
 
     private static int def_rayon = 30;
-    private static int def_MouvementX = 3;
-    private static int def_MouvementY = 8;
+    private static int def_MouvementX = 5;
+    private static int def_MouvementY = 10;
 
     private int rayon = def_rayon;
     private int MouvementX = def_MouvementX;
@@ -43,7 +43,13 @@ public class Ball implements GameObject {
     public int getMouvementX() {
         return MouvementX;
     }
-    public void setMouvementX(int val) { MouvementX = val; }
+    public void setMouvementX(int val) {
+        int value = Math.min(15, Math.abs(val));
+        if (val < 0 ) value = value * -1;
+        MouvementX = value;
+        Log.v("Michel", "MouvementX : " + String.valueOf(value));
+
+    }
 
     public int getMouvementY() {
         return MouvementY;
