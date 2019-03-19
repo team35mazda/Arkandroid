@@ -13,8 +13,8 @@ import android.util.Log;
 public class Ball implements GameObject {
 
     private static int def_rayon = 30;
-    private static int def_MouvementX = 5;
-    private static int def_MouvementY = 10;
+    private static int def_MouvementX = 3;
+    private static int def_MouvementY = 5;
 
     private int rayon = def_rayon;
     private int MouvementX = def_MouvementX;
@@ -47,7 +47,7 @@ public class Ball implements GameObject {
         int value = Math.min(15, Math.abs(val));
         if (val < 0 ) value = value * -1;
         MouvementX = value;
-        Log.v("Michel", "MouvementX : " + String.valueOf(value));
+        Log.v("Arkanoid - Ball", "MouvementX : " + String.valueOf(value));
 
     }
 
@@ -64,14 +64,14 @@ public class Ball implements GameObject {
     }
     public void setdirectionX(boolean val) {
         this.directionX = val;
-        Log.v("Michel", "setdirectionX to " + String.valueOf(val));
+        Log.v("Arkanoid - Ball", "setdirectionX to " + String.valueOf(val));
     }
     public boolean getdirectionY() {
         return directionY;
     }
     public void setdirectionY(boolean val) {
         this.directionY = val;
-        Log.v("Michel", "setdirectionY to " + String.valueOf(val));
+        Log.v("Arkanoid - Ball", "setdirectionY to " + String.valueOf(val));
     }
 
     @Override
@@ -103,7 +103,7 @@ public class Ball implements GameObject {
         txt = "   Ball move  FROM (" + String.valueOf(point.x) + "," + String.valueOf(point.y) + ")  TO (";
         point.set(x,y);
         txt = txt  + String.valueOf(x) + "," + String.valueOf(y) + ")";
-        Log.v("Michel", txt);
+        //Log.v("Arkanoid Ball", txt);
     }
 
     public void update(Point point){
