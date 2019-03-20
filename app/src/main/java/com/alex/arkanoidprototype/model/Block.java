@@ -23,74 +23,40 @@ public class Block implements GameObject {
         return this.rectangle;
     }
 
-    public BlockHit ballHit(Point ballCoord, boolean directionX, boolean directionY, int MouvementX, int MouvementY, int rayon){
-        BlockHit bhit = new BlockHit();
+    public void ballHit(BlockHit bhit, Point ballCoord, boolean directionX, boolean directionY, int MouvementX, int MouvementY, int rayon){
 
-        if (!visible) return bhit;
+        //Todo: pour une meilleure détection, il faudrait calculer tous les points de la circonférences et valider par rapport aux coordonnée du rectangle
 
-        //double UnTierRayon = Ball.rayon*1/3;
+        DetectHIT:
+        {
+            //Si le block est déja tappé... donc invisible.. on ne cherche pas s'il y a un hit
+            if (!visible) break DetectHIT;//return bhit;
 
-        // Je ne peux pas utiliser Contains, j'ai besoin de savoir comment le block a été touché (côté ou haut/bas)
-/*        if (rectangle.contains(ballCoord.left, ballCoord.top)
-                || rectangle.contains(ballCoord.right,ballCoord.top)
-                || rectangle.contains(ballCoord.left, ballCoord.bottom)
-                || rectangle.contains(ballCoord.right,ballCoord.bottom))
-                return true;*/
-
-                //
-
-        if ((!bhit.getHit()) && (ballCoord.x-rayon >= rectangle.left) && (ballCoord.x+rayon <= rectangle.right)) {
-            if ((ballCoord.y - rayon <= rectangle.bottom) && (ballCoord.y - MouvementY > rectangle.bottom)) {
-                bhit.setHitByY(true);
-                bhit.HitByBottom = true;
-            }
-            if ((ballCoord.y + rayon >= rectangle.top) && (ballCoord.y + MouvementY < rectangle.top)) {
-                bhit.setHitByY(true);
-                bhit.HitByTop = true;
-            }
-        }
-        if ((!bhit.getHit()) && (ballCoord.y-rayon >= rectangle.top) && (ballCoord.y+rayon <= rectangle.bottom)){
-            if ((ballCoord.x + rayon >= rectangle.left) && (ballCoord.x + MouvementX < rectangle.left)) {
-                bhit.setHitByX(true);
-                bhit.HitByLeft = true;
-            }
-            if ((ballCoord.x - rayon <= rectangle.right) && (ballCoord.x - MouvementX > rectangle.right)) {
-                bhit.setHitByX(true);
-                bhit.HitByRigth= true;
-            }
-        }
-
-/*
-        else {
-                    //&& (ballCoord.bottom >= rectangle.bottom)
-                if ((ballCoord.top <= rectangle.bottom) ) {
-                    bhit.setHitByX(true);
-                    bhit.HitByBottom = true;
+            if ((ballCoord.x + rayon/2 >= rectangle.left) && (ballCoord.x - rayon/2 <= rectangle.right)) {
+                if ((ballCoord.y - rayon <= rectangle.bottom) && (ballCoord.y > rectangle.bottom)) {
+                    bhit.setHitByBottom(true);
                 }
-            }
-        }
-*/
-/*
-        //on poursuit seulement si on a pas déjà fait un hit
-        if (!bhit.getHit()) {
-                //
-            if ((ballCoord.top >= rectangle.bottom) && (ballCoord.bottom <= rectangle.top)) {
-                    // && (ballCoord.right-UnTierRayon <= rectangle.left)
-                if ((ballCoord.right >= rectangle.left)) {
-                    bhit.setHitByY(true);
-                    bhit.HitByLeft = true;
-                } else {
-                        //  && (ballCoord.right >= rectangle.right)
-                    if ((ballCoord.left <= rectangle.right)) {
-                        bhit.setHitByY(true);
-                        bhit.HitByRigth= true;
+                else {
+                    if ((ballCoord.y + rayon >= rectangle.top) && (ballCoord.y  < rectangle.top)) {
+                        bhit.setHitByTop(true);
                     }
                 }
             }
-        }*/
+            else{
+                if ((ballCoord.y + rayon/2 >= rectangle.top) && (ballCoord.y - rayon/2 <= rectangle.bottom)) {
+                    if ((ballCoord.x + rayon >= rectangle.left) && (ballCoord.x < rectangle.left)) {
+                        bhit.setHitByLeft(true);
+                    }
+                    else {
+                        if ((ballCoord.x - rayon <= rectangle.right) && (ballCoord.x > rectangle.right)) {
+                            bhit.setHitByRigth(true);
+                        }
+                    }
+                }
+            }
 
-        if (bhit.getHit()) this.visible = false;
-        return bhit;
+            if (bhit.getHit()) this.visible = false;
+        }
     }
 
     @Override
