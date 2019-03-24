@@ -92,7 +92,8 @@ public class NiveauItemDataSource {
 
         NiveauItem niveauItem = new NiveauItem();
         niveauItem.setId(cursor.getLong(0));
-        niveauItem.setNiveauItem(cursor.getLong(1),cursor.getLong(2));
+        niveauItem.setIdItem(cursor.getLong(1));
+        niveauItem.setIdNiveau(cursor.getLong(2));
         return niveauItem;
     }
 }
