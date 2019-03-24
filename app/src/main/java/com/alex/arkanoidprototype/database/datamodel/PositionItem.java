@@ -1,16 +1,16 @@
 package com.alex.arkanoidprototype.database.datamodel;
 
-public class NiveauItem {
+public class PositionItem {
 
     private long id;
-    private long idNiveau;
+    private long idPosition;
     private long idItem;
 
     public void setId(long id) { this.id = id; }
-    public void setIdNiveau(long idNiveau) { this.idNiveau = idNiveau; }
+    public void setIdPosition(long idPosition) { this.idPosition = idPosition; }
     public void setIdItem(long idItem) { this.idItem = idItem; }
 
     public long getId() { return id; }
-    public long getIdNiveau() { return idNiveau; }
+    public long getIdPosition() { return idPosition; }
     public long getIdItem() { return idItem; }
 }
