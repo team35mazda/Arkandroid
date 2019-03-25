@@ -10,7 +10,7 @@ import com.alex.arkanoidprototype.database.datasource.NiveauItemDataSource;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "commments.db";
+    private static final String DATABASE_NAME = "arkandroid.db";
     private static final int DATABASE_VERSION = 1;
 
     public SQLiteHelper(Context context) {
