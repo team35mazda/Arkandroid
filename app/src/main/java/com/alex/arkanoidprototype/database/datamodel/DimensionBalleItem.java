@@ -1,6 +1,6 @@
 package com.alex.arkanoidprototype.database.datamodel;
 
-public class DimensionBalletem {
+public class DimensionBalleItem {
     private long id;
     private long idItem;
     private long idDimensionBalle;

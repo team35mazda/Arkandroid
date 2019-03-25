@@ -2,13 +2,13 @@ package com.alex.arkanoidprototype.database.datamodel;
 
 public class NiveauItemCurrentVisibility {
     private long id;
-    private boolean isVisible;
+    private short isVisible;
 
     public void setId(long id) { this.id = id; }
-    public void setIsVisible(boolean isVisible) { this.isVisible = isVisible; }
+    public void setIsVisible(short isVisible) { this.isVisible = isVisible; }
 
     public long getId() {
         return id;
     }
-    public boolean getIsVisible() { return isVisible;}
+    public short getIsVisible() { return isVisible;}
 }

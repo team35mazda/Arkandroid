@@ -13,27 +13,34 @@ import com.alex.arkanoidprototype.database.datamodel.NiveauItem;
 
 public class NiveauItemDataSource {
 
-    public static final String TABLE_NIVEAUITEM = "niveau";
-    public static final String TABLE_NIVEAUITEM_COLUMN_ID = "IDNiveauItem";
-    public static final String TABLE_NIVEAUITEM_COLUMN_IDNIVEAU = "IDNiveau";
-    public static final String TABLE_NIVEAUITEM_COLUMN_IDITEM = "IDItem";
+    private long id;
+    private long idNiveau;
+    private long idItem;
+
+    public static final String TABLE_NIVEAU_ITEM = "NiveauItem";
+    public static final String TABLE_NIVEAU_ITEM_COLUMN_ID = "ID";
+    public static final String TABLE_NIVEAU_ITEM_COLUMN_ID_NIVEAU = "IDNiveau";
+    public static final String TABLE_NIVEAU_ITEM_COLUMN_ID_ITEM = "IDItem";
 
     public static String create(){
-         return "create table "
-                + TABLE_NIVEAUITEM + "(" + TABLE_NIVEAUITEM_COLUMN_ID
-                + " integer primary key autoincrement, " + TABLE_NIVEAUITEM_COLUMN_IDNIVEAU
-                + " integer not null, " + TABLE_NIVEAUITEM_COLUMN_IDITEM
-                + " integer not null); ";
+        return "create table " + TABLE_NIVEAU_ITEM + "("
+                + TABLE_NIVEAU_ITEM_COLUMN_ID + " integer primary key autoincrement, "
+                + TABLE_NIVEAU_ITEM_COLUMN_ID_NIVEAU + " integer not null, "
+                + TABLE_NIVEAU_ITEM_COLUMN_ID_ITEM + " integer not null); ";
     }
 
     public static String drop(){
-        return "DROP TABLE IF EXISTS " + TABLE_NIVEAUITEM +"; ";
+        return "DROP TABLE IF EXISTS " + TABLE_NIVEAU_ITEM +"; ";
     }
 
     // Database fields
     private SQLiteDatabase database;
     private SQLiteHelper dbHelper;
-    private String[] allColumns = {TABLE_NIVEAUITEM_COLUMN_ID, TABLE_NIVEAUITEM_COLUMN_IDNIVEAU, TABLE_NIVEAUITEM_COLUMN_IDITEM};
+    private String[] allColumns = {
+            TABLE_NIVEAU_ITEM_COLUMN_ID,
+            TABLE_NIVEAU_ITEM_COLUMN_ID_NIVEAU,
+            TABLE_NIVEAU_ITEM_COLUMN_ID_ITEM
+    };
 
     public NiveauItemDataSource(Context context) {
         dbHelper = new SQLiteHelper(context);
@@ -47,14 +54,14 @@ public class NiveauItemDataSource {
         dbHelper.close();
     }
 
-    public NiveauItem createNiveauItem(long idNiveau,long idItem) {
+    public NiveauItem createNiveauItem(long idNiveau, long idItem) {
 
         ContentValues values = new ContentValues();
-        values.put(TABLE_NIVEAUITEM_COLUMN_IDNIVEAU, idNiveau);
-        values.put(TABLE_NIVEAUITEM_COLUMN_IDITEM, idItem);
-        long insertId = database.insert(TABLE_NIVEAUITEM, null, values);
-        Cursor cursor = database.query(TABLE_NIVEAUITEM,
-                allColumns, TABLE_NIVEAUITEM_COLUMN_ID + " = " + insertId, null,
+        values.put(TABLE_NIVEAU_ITEM_COLUMN_ID_NIVEAU, idNiveau);
+        values.put(TABLE_NIVEAU_ITEM_COLUMN_ID_ITEM, idItem);
+        long insertId = database.insert(TABLE_NIVEAU_ITEM, null, values);
+        Cursor cursor = database.query(TABLE_NIVEAU_ITEM,
+                allColumns, TABLE_NIVEAU_ITEM_COLUMN_ID + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
         NiveauItem newNiveauItem = cursorToNiveauItem(cursor);
@@ -62,11 +69,11 @@ public class NiveauItemDataSource {
         return newNiveauItem;
     }
 
-    public void deleteComment(NiveauItem comment) {
+    public void deleteNiveauItem(NiveauItem niveauItem) {
 
-        long id = comment.getId();
-        System.out.println("Comment deleted with id: " + id);
-        database.delete(TABLE_NIVEAUITEM, TABLE_NIVEAUITEM_COLUMN_ID
+        long id = niveauItem.getId();
+        System.out.println("NiveauItem deleted with id: " + id);
+        database.delete(TABLE_NIVEAU_ITEM, TABLE_NIVEAU_ITEM_COLUMN_ID
                 + " = " + id, null);
     }
 
@@ -74,7 +81,7 @@ public class NiveauItemDataSource {
 
         List<NiveauItem> niveauItems = new ArrayList<NiveauItem>();
 
-        Cursor cursor = database.query(TABLE_NIVEAUITEM,
+        Cursor cursor = database.query(TABLE_NIVEAU_ITEM,
                 allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
@@ -89,11 +96,10 @@ public class NiveauItemDataSource {
     }
 
     private NiveauItem cursorToNiveauItem(Cursor cursor) {
-
         NiveauItem niveauItem = new NiveauItem();
         niveauItem.setId(cursor.getLong(0));
-        niveauItem.setIdItem(cursor.getLong(1));
-        niveauItem.setIdNiveau(cursor.getLong(2));
+        niveauItem.setIdNiveau(cursor.getLong(1));
+        niveauItem.setIdItem(cursor.getLong(2));
         return niveauItem;
     }
 }

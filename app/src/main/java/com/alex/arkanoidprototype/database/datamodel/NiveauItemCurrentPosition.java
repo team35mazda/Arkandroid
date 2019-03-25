@@ -1,6 +1,6 @@
 package com.alex.arkanoidprototype.database.datamodel;
 
-public class NiveauItemCurrentPostion {
+public class NiveauItemCurrentPosition {
     private long id;
     private long positionX;
     private long positionY;
