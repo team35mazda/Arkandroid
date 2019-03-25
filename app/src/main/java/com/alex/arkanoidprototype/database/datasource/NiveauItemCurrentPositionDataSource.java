@@ -14,18 +14,16 @@ import java.util.List;
 
 public class NiveauItemCurrentPositionDataSource {
 
-    private long id;
-    private long positionX;
-    private long positionY;
-
     public static final String TABLE_NIVEAU_ITEM_CURRENT_POSITION = "NiveauItemCurrentPosition";
     public static final String TABLE_NIVEAU_ITEM_CURRENT_POSITION_COLUMN_ID = "ID";
+    public static final String TABLE_NIVEAU_ITEM_CURRENT_POSITION_COLUMN_ID_NIVEAU_ITEM = "IDNiveauItem";
     public static final String TABLE_NIVEAU_ITEM_CURRENT_POSITION_COLUMN_POSITION_X = "PositionX";
     public static final String TABLE_NIVEAU_ITEM_CURRENT_POSITION_COLUMN_POSITION_Y = "PositionY";
 
     public static String create(){
         return "create table " + TABLE_NIVEAU_ITEM_CURRENT_POSITION + "("
                 + TABLE_NIVEAU_ITEM_CURRENT_POSITION_COLUMN_ID + " integer primary key autoincrement, "
+                + TABLE_NIVEAU_ITEM_CURRENT_POSITION_COLUMN_ID_NIVEAU_ITEM + " integer not null, "
                 + TABLE_NIVEAU_ITEM_CURRENT_POSITION_COLUMN_POSITION_X + " integer not null, "
                 + TABLE_NIVEAU_ITEM_CURRENT_POSITION_COLUMN_POSITION_Y + " integer not null); ";
     }
@@ -39,6 +37,7 @@ public class NiveauItemCurrentPositionDataSource {
     private SQLiteHelper dbHelper;
     private String[] allColumns = {
             TABLE_NIVEAU_ITEM_CURRENT_POSITION_COLUMN_ID,
+            TABLE_NIVEAU_ITEM_CURRENT_POSITION_COLUMN_ID_NIVEAU_ITEM,
             TABLE_NIVEAU_ITEM_CURRENT_POSITION_COLUMN_POSITION_X,
             TABLE_NIVEAU_ITEM_CURRENT_POSITION_COLUMN_POSITION_Y
     };
@@ -55,9 +54,10 @@ public class NiveauItemCurrentPositionDataSource {
         dbHelper.close();
     }
 
-    public NiveauItemCurrentPosition createNiveauItemCurrentPosition(long positionX, long positionY) {
+    public NiveauItemCurrentPosition createNiveauItemCurrentPosition(long idNiveauItem, long positionX, long positionY) {
 
         ContentValues values = new ContentValues();
+        values.put(TABLE_NIVEAU_ITEM_CURRENT_POSITION_COLUMN_ID_NIVEAU_ITEM, idNiveauItem);
         values.put(TABLE_NIVEAU_ITEM_CURRENT_POSITION_COLUMN_POSITION_X, positionX);
         values.put(TABLE_NIVEAU_ITEM_CURRENT_POSITION_COLUMN_POSITION_Y, positionY);
         long insertId = database.insert(TABLE_NIVEAU_ITEM_CURRENT_POSITION, null, values);
@@ -99,8 +99,9 @@ public class NiveauItemCurrentPositionDataSource {
     private NiveauItemCurrentPosition cursorToNiveauItemCurrentPosition(Cursor cursor) {
         NiveauItemCurrentPosition niveauItemCurrentPosition = new NiveauItemCurrentPosition();
         niveauItemCurrentPosition.setId(cursor.getLong(0));
-        niveauItemCurrentPosition.setPositionX(cursor.getLong(1));
-        niveauItemCurrentPosition.setPositionY(cursor.getLong(2));
+        niveauItemCurrentPosition.setIdNiveauItem(cursor.getLong(1));
+        niveauItemCurrentPosition.setPositionX(cursor.getLong(2));
+        niveauItemCurrentPosition.setPositionY(cursor.getLong(3));
         return niveauItemCurrentPosition;
     }
 }

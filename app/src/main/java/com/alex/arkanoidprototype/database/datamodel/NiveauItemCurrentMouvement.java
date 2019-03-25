@@ -2,12 +2,14 @@ package com.alex.arkanoidprototype.database.datamodel;
 
 public class NiveauItemCurrentMouvement {
     private long id;
+    private long idNiveauItem;
     private long vitesseX;
     private long vitesseY;
     private long directionX;
     private long directionY;
 
     public void setId(long id) { this.id = id; }
+    public void setIdNiveauItem(long idNiveauItem) { this.idNiveauItem = idNiveauItem; }
     public void setVitesseX(long vitesseX) { this.vitesseX = vitesseX; }
     public void setVitesseY(long vitesseY) { this.vitesseY = vitesseY; }
     public void setDirectionX(long directionX) { this.directionX = directionX; }
@@ -15,6 +17,9 @@ public class NiveauItemCurrentMouvement {
 
     public long getId() {
         return id;
+    }
+    public long getIdNiveauItem() {
+        return idNiveauItem;
     }
     public long getVitesseX() {
         return vitesseX;

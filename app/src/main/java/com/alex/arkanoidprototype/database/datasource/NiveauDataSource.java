@@ -14,9 +14,6 @@ import java.util.List;
 
 public class NiveauDataSource {
 
-    private long id;
-    private String code;
-
     public static final String TABLE_NIVEAU = "Niveau";
     public static final String TABLE_NIVEAU_COLUMN_ID = "ID";
     public static final String TABLE_NIVEAU_COLUMN_CODE = "Code";

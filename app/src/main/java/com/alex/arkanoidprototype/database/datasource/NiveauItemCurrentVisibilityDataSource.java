@@ -14,16 +14,15 @@ import java.util.List;
 
 public class NiveauItemCurrentVisibilityDataSource {
 
-    private long id;
-    private short isVisible;
-
     public static final String TABLE_NIVEAU_ITEM_CURRENT_VISIBILITY = "NiveauItemCurrentVisibility";
     public static final String TABLE_NIVEAU_ITEM_CURRENT_VISIBILITY_COLUMN_ID = "ID";
+    public static final String TABLE_NIVEAU_ITEM_CURRENT_VISIBILITY_COLUMN_ID_NIVEAU_ITEM = "IDNiveauItem";
     public static final String TABLE_NIVEAU_ITEM_CURRENT_VISIBILITY_COLUMN_IS_VISIBLE = "IsVisible";
 
     public static String create(){
         return "create table " + TABLE_NIVEAU_ITEM_CURRENT_VISIBILITY + "("
                 + TABLE_NIVEAU_ITEM_CURRENT_VISIBILITY_COLUMN_ID + " integer primary key autoincrement, "
+                + TABLE_NIVEAU_ITEM_CURRENT_VISIBILITY_COLUMN_ID_NIVEAU_ITEM + " integer not null, "
                 + TABLE_NIVEAU_ITEM_CURRENT_VISIBILITY_COLUMN_IS_VISIBLE + " integer not null); ";
     }
 
@@ -36,6 +35,7 @@ public class NiveauItemCurrentVisibilityDataSource {
     private SQLiteHelper dbHelper;
     private String[] allColumns = {
             TABLE_NIVEAU_ITEM_CURRENT_VISIBILITY_COLUMN_ID,
+            TABLE_NIVEAU_ITEM_CURRENT_VISIBILITY_COLUMN_ID_NIVEAU_ITEM,
             TABLE_NIVEAU_ITEM_CURRENT_VISIBILITY_COLUMN_IS_VISIBLE
     };
 
@@ -51,9 +51,10 @@ public class NiveauItemCurrentVisibilityDataSource {
         dbHelper.close();
     }
 
-    public NiveauItemCurrentVisibility createNiveauItemCurrentVisibility(short isVisible) {
+    public NiveauItemCurrentVisibility createNiveauItemCurrentVisibility(long idNiveauItem, short isVisible) {
 
         ContentValues values = new ContentValues();
+        values.put(TABLE_NIVEAU_ITEM_CURRENT_VISIBILITY_COLUMN_ID_NIVEAU_ITEM, idNiveauItem);
         values.put(TABLE_NIVEAU_ITEM_CURRENT_VISIBILITY_COLUMN_IS_VISIBLE, isVisible);
         long insertId = database.insert(TABLE_NIVEAU_ITEM_CURRENT_VISIBILITY, null, values);
         Cursor cursor = database.query(TABLE_NIVEAU_ITEM_CURRENT_VISIBILITY,
@@ -95,7 +96,8 @@ public class NiveauItemCurrentVisibilityDataSource {
 
         NiveauItemCurrentVisibility niveauItemCurrentVisibility = new NiveauItemCurrentVisibility();
         niveauItemCurrentVisibility.setId(cursor.getLong(0));
-        niveauItemCurrentVisibility.setIsVisible(cursor.getShort(1));
+        niveauItemCurrentVisibility.setIdNiveauItem(cursor.getLong(1));
+        niveauItemCurrentVisibility.setIsVisible(cursor.getShort(2));
         return niveauItemCurrentVisibility;
     }
 }

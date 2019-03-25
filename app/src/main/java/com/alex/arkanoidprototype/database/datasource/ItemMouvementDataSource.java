@@ -14,10 +14,6 @@ import java.util.List;
 
 public class ItemMouvementDataSource {
 
-    private long id;
-    private long idItem;
-    private long idMouvement;
-
     public static final String TABLE_ITEM_MOUVEMENT = "ItemMouvement";
     public static final String TABLE_ITEM_MOUVEMENT_COLUMN_ID = "ID";
     public static final String TABLE_ITEM_MOUVEMENT_COLUMN_ID_ITEM = "IDItem";

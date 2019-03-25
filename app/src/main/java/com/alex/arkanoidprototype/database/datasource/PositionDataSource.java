@@ -14,10 +14,6 @@ import java.util.List;
 
 public class PositionDataSource {
 
-    private long id;
-    private long positionX;
-    private long positionY;
-
     public static final String TABLE_POSITION = "Position";
     public static final String TABLE_POSITION_COLUMN_ID = "ID";
     public static final String TABLE_POSITION_COLUMN_POSITION_X = "PositionX";

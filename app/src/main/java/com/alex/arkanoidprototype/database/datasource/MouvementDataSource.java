@@ -14,12 +14,6 @@ import java.util.List;
 
 public class MouvementDataSource {
 
-    private long id;
-    private long vitesseX;
-    private long vitesseY;
-    private long directionX;
-    private long directionY;
-
     public static final String TABLE_MOUVEMENT = "Mouvement";
     public static final String TABLE_MOUVEMENT_COLUMN_ID = "ID";
     public static final String TABLE_MOUVEMENT_COLUMN_VITESSE_X = "VitesseX";

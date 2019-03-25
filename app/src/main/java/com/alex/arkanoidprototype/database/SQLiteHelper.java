@@ -25,7 +25,24 @@ import com.alex.arkanoidprototype.database.datasource.PositionItemDataSource;
 public class SQLiteHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "arkandroid.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
+
+    private CouleurDataSource couleurDataSource;
+    private DimensionBalleDataSource dimensionBalleDataSource;
+    private DimensionBalleItemDataSource dimensionBalleItemDataSource;
+    private DimensionBaseDataSource dimensionBaseDataSource;
+    private DimensionBaseItemDataSource dimensionBaseItemDataSource;
+    private ItemDataSource itemDataSource;
+    private ItemMouvementDataSource itemMouvementDataSource;
+    private ItemTypeDataSource itemTypeDataSource;
+    private MouvementDataSource mouvementDataSource;
+    private NiveauDataSource niveauDataSource;
+    private NiveauItemCurrentMouvementDataSource niveauItemCurrentMouvementDataSource;
+    private NiveauItemCurrentPositionDataSource niveauItemCurrentPositionDataSource;
+    private NiveauItemCurrentVisibilityDataSource niveauItemCurrentVisibilityDataSource;
+    private NiveauItemDataSource niveauItemDataSource;
+    private PositionDataSource positionDataSource;
+    private PositionItemDataSource positionItemDataSource;
 
     public SQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

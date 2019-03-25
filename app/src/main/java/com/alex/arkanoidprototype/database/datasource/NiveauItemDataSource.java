@@ -13,10 +13,6 @@ import com.alex.arkanoidprototype.database.datamodel.NiveauItem;
 
 public class NiveauItemDataSource {
 
-    private long id;
-    private long idNiveau;
-    private long idItem;
-
     public static final String TABLE_NIVEAU_ITEM = "NiveauItem";
     public static final String TABLE_NIVEAU_ITEM_COLUMN_ID = "ID";
     public static final String TABLE_NIVEAU_ITEM_COLUMN_ID_NIVEAU = "IDNiveau";

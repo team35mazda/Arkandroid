@@ -14,14 +14,9 @@ import java.util.List;
 
 public class NiveauItemCurrentMouvementDataSource {
 
-    private long id;
-    private long vitesseX;
-    private long vitesseY;
-    private long directionX;
-    private long directionY;
-
     public static final String TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT = "NiveauItemCurrentMouvement";
     public static final String TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_ID = "ID";
+    public static final String TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_ID_NIVEAU_ITEM = "IDNiveauItem";
     public static final String TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_VITESSE_X = "VitesseX";
     public static final String TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_VITESSE_Y = "VitesseY";
     public static final String TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_DIRECTION_X = "DirectionX";
@@ -30,6 +25,7 @@ public class NiveauItemCurrentMouvementDataSource {
     public static String create(){
         return "create table " + TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT + "("
                 + TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_ID + " integer primary key autoincrement, "
+                + TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_ID_NIVEAU_ITEM + " integer not null, "
                 + TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_VITESSE_X + " integer not null, "
                 + TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_VITESSE_Y + " integer not null, "
                 + TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_DIRECTION_X + " integer not null, "
@@ -45,6 +41,7 @@ public class NiveauItemCurrentMouvementDataSource {
     private SQLiteHelper dbHelper;
     private String[] allColumns = {
             TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_ID,
+            TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_ID_NIVEAU_ITEM,
             TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_VITESSE_X,
             TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_VITESSE_Y,
             TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_DIRECTION_X,
@@ -63,9 +60,10 @@ public class NiveauItemCurrentMouvementDataSource {
         dbHelper.close();
     }
 
-    public NiveauItemCurrentMouvement createNiveauItemCurrentMouvement(long vitesseX, long vitesseY, long directionX, long directionY) {
+    public NiveauItemCurrentMouvement createNiveauItemCurrentMouvement(long idNiveauItem, long vitesseX, long vitesseY, long directionX, long directionY) {
 
         ContentValues values = new ContentValues();
+        values.put(TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_ID_NIVEAU_ITEM, idNiveauItem);
         values.put(TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_VITESSE_X, vitesseX);
         values.put(TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_VITESSE_Y, vitesseY);
         values.put(TABLE_NIVEAU_ITEM_CURRENT_MOUVEMENT_COLUMN_DIRECTION_X, directionX);
@@ -109,10 +107,11 @@ public class NiveauItemCurrentMouvementDataSource {
     private NiveauItemCurrentMouvement cursorToNiveauItemCurrentMouvement(Cursor cursor) {
         NiveauItemCurrentMouvement niveauItemCurrentMouvement = new NiveauItemCurrentMouvement();
         niveauItemCurrentMouvement.setId(cursor.getLong(0));
-        niveauItemCurrentMouvement.setVitesseX(cursor.getLong(1));
-        niveauItemCurrentMouvement.setVitesseY(cursor.getLong(2));
-        niveauItemCurrentMouvement.setDirectionX(cursor.getLong(3));
-        niveauItemCurrentMouvement.setDirectionY(cursor.getLong(4));
+        niveauItemCurrentMouvement.setIdNiveauItem(cursor.getLong(1));
+        niveauItemCurrentMouvement.setVitesseX(cursor.getLong(2));
+        niveauItemCurrentMouvement.setVitesseY(cursor.getLong(3));
+        niveauItemCurrentMouvement.setDirectionX(cursor.getLong(4));
+        niveauItemCurrentMouvement.setDirectionY(cursor.getLong(5));
         return niveauItemCurrentMouvement;
     }
 }

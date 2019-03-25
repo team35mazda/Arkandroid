@@ -14,9 +14,6 @@ import java.util.List;
 
 public class ItemTypeDataSource {
 
-    private long id;
-    private String code;
-
     public static final String TABLE_ITEM_TYPE = "ItemType";
     public static final String TABLE_ITEM_TYPE_COLUMN_ID = "ID";
     public static final String TABLE_ITEM_TYPE_COLUMN_CODE = "Code";
