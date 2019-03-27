@@ -9,24 +9,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 
-import com.alex.arkanoidprototype.database.DatabaseManager;
-import com.alex.arkanoidprototype.database.datasource.CouleurDataSource;
-import com.alex.arkanoidprototype.database.datasource.DimensionBalleDataSource;
-import com.alex.arkanoidprototype.database.datasource.DimensionBalleItemDataSource;
-import com.alex.arkanoidprototype.database.datasource.DimensionBaseDataSource;
-import com.alex.arkanoidprototype.database.datasource.DimensionBaseItemDataSource;
-import com.alex.arkanoidprototype.database.datasource.ItemDataSource;
-import com.alex.arkanoidprototype.database.datasource.ItemMouvementDataSource;
-import com.alex.arkanoidprototype.database.datasource.ItemTypeDataSource;
-import com.alex.arkanoidprototype.database.datasource.MouvementDataSource;
-import com.alex.arkanoidprototype.database.datasource.NiveauDataSource;
-import com.alex.arkanoidprototype.database.datasource.NiveauItemCurrentMouvementDataSource;
-import com.alex.arkanoidprototype.database.datasource.NiveauItemCurrentPositionDataSource;
-import com.alex.arkanoidprototype.database.datasource.NiveauItemCurrentVisibilityDataSource;
-import com.alex.arkanoidprototype.database.datasource.NiveauItemDataSource;
-import com.alex.arkanoidprototype.database.datasource.PositionDataSource;
-import com.alex.arkanoidprototype.database.datasource.PositionItemDataSource;
 import com.alex.arkanoidprototype.model.SensorActivity;
+
 
 //public class MainActivity extends Activity {
 public class MainActivity extends Activity implements SensorEventListener {
@@ -37,7 +21,6 @@ public class MainActivity extends Activity implements SensorEventListener {
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
     private Sensor mRotationSensor;
-    private DatabaseManager databaseManager;
 
     private long lastUpdate = 0;
     private float last_x, last_y, last_z;
@@ -53,9 +36,6 @@ public class MainActivity extends Activity implements SensorEventListener {
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senSensorManager.registerListener(this, senAccelerometer , SensorManager.SENSOR_DELAY_NORMAL);
         // fin MOI ###########################################################
-
-        //Créer une instance de BD
-        databaseManager = new DatabaseManager(this);
 
         setContentView(new GamePanel(this));
     }
@@ -118,19 +98,11 @@ public class MainActivity extends Activity implements SensorEventListener {
     protected void onPause() {
         super.onPause();
         senSensorManager.unregisterListener(this);
-        // Fermer la bd
-        databaseManager.close();
-
-
     }
     protected void onResume() {
         super.onResume();
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        //Ouvrir la bd
-        databaseManager.open();
-
     }
-
 
     public int get_tourner() {
         return tourner;

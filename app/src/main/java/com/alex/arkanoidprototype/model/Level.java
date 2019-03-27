@@ -198,14 +198,14 @@ public class Level {
 
     public void draw(Canvas canvas){
 
-        //décallé la construction du tableau jusqu'à ce qu'on ait la taille du canvas... donc ici..
-        //Change la largeur des blocks pour afficher X block de large (à définir) et qui prend le maximum de place à l'écran
+        //dÃ©callÃ© la construction du tableau jusqu'Ã  ce qu'on ait la taille du canvas... donc ici..
+        //Change la largeur des blocks pour afficher X block de large (Ã  dÃ©finir) et qui prend le maximum de place Ã  l'Ã©cran
         if (assembly == null){
-            this.BLOCK_WIDTH = (int)round(canvas.getWidth()/LEVEL_WIDTH) + 1; //Arrondi par le bas pour être plus petit que l'écran sans déborder
-            this.BLOCK_HEIGHT = (int)round(this.BLOCK_WIDTH/3);  // hauteur = arrondi à 1/3 de la largeur
+            this.BLOCK_WIDTH = (int)round(canvas.getWidth()/LEVEL_WIDTH) + 1; //Arrondi par le bas pour Ãªtre plus petit que l'Ã©cran sans dÃ©border
+            this.BLOCK_HEIGHT = (int)round(this.BLOCK_WIDTH/3);  // hauteur = arrondi Ã  1/3 de la largeur
             assembly = new Block[this.LEVEL_WIDTH][LEVEL_HEIGHT];
 
-            this.startPosition = (int)round(canvas.getHeight()*0.1); // ON arriche à 10% de la hauteur
+            this.startPosition = (int)round(canvas.getHeight()*0.1); // ON arriche Ã  10% de la hauteur
             constructRandomLevel();
         }
 
