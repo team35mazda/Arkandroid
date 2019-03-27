@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -40,12 +41,25 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static int pointY = 1200;
     public static int screenWidth;
 
-
     public GamePanel(Context context){
         super(context);
-
         getHolder().addCallback(this);
+        this.initGamePanel(context);
+    }
 
+    public GamePanel(Context context, AttributeSet attrs){
+        super(context, attrs);
+        getHolder().addCallback(this);
+        this.initGamePanel(context);
+    }
+
+    public GamePanel(Context context, AttributeSet attrs, int defStyle){
+        super(context, attrs, defStyle);
+        getHolder().addCallback(this);
+        this.initGamePanel(context);
+    }
+
+    private void initGamePanel(Context context){
         thread = new MainThread(getHolder(), this);
 
         slider = new Slider(new Rect(0,0,200,75), Color.rgb(255,0,0));
@@ -76,9 +90,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         //Création du contrôleur de sons du jeu
         soundController = new SoundController(context);
-
+        //Création de l'ecouteur d'evenements de senseurs
         controlListener = new ControlListener(context,this);
-
     }
 
     @Override
@@ -168,9 +181,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 break;
         }
 
-        Log.v("Arkanoid - GamePanel", "Rebond sur plaque Direction ("+ball.getdirectionX()+")   Old Mouvement : " + oldMouvement + ", New Mouvement : " + ret + " |   plaquePos  : " + plaquePos + "    Balle : " + Position + "    SeptiemeDePlaque  : " + SeptiemeDePlaque);
-
-        return ret;
+         return ret;
     }
 
     private void detect_collision(Canvas canvas){

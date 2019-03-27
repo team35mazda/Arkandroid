@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">ArkanoidPrototype</string>
+    <string name="appName">Arkandroid</string>
+    <string name="lifeTitle">VIES:</string>
+    <string name="life">-</string>
 </resources>

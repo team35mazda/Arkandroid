@@ -1,43 +1,31 @@
 package com.alex.arkanoidprototype.controler;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.res.Configuration;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.provider.Settings;
+import android.support.v7.app.AppCompatActivity;
+import com.alex.arkanoidprototype.R;
 
-import com.alex.arkanoidprototype.model.SensorActivity;
-
-//public class MainActivity extends Activity {
-public class MainActivity extends Activity {
-
-
-    GamePanel gamePanel;
+public class MainActivity extends AppCompatActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        gamePanel = new GamePanel(this);
+        setContentView(R.layout.activity_main);
 
-        setContentView(gamePanel);
+
     }
 
 
 
     protected void onPause() {
         super.onPause();
-        gamePanel.getControlListener().unregisterListener();
+
+        ((GamePanel) findViewById(R.id.game_panel)).getControlListener().unregisterListener();
     }
     protected void onResume() {
         super.onResume();
-        gamePanel.getControlListener().registerListener();
+        ((GamePanel) findViewById(R.id.game_panel)).getControlListener().registerListener();
     }
 
 }

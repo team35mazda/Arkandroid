@@ -14,6 +14,7 @@ public class SoundController {
     AudioAttributes audioAttributes;
     public static int BLOCK_HIT = 0;
     public static int SLIDER_HIT = 1;
+    public static int LEVEL_BG = 2;
 
     public SoundController(Context context){
        this.audioAttributes = new AudioAttributes.Builder()
@@ -25,9 +26,10 @@ public class SoundController {
                .setAudioAttributes(this.audioAttributes)
                .build();
 
-       this.soundIds = new int[2];
-       this.soundIds[BLOCK_HIT] = this.sp.load(context, R.raw.blockhit,1);
-       this.soundIds[SLIDER_HIT] = this.sp.load(context,R.raw.sliderhit,1);
+       this.soundIds = new int[3];
+      this.soundIds[BLOCK_HIT] = this.sp.load(context,R.raw.blockhit,1);
+      this.soundIds[SLIDER_HIT] = this.sp.load(context,R.raw.sliderhit,1);
+
     }
 
     public void playBlockHitSound(){
