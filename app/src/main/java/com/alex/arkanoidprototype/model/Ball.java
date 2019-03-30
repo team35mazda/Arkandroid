@@ -47,8 +47,6 @@ public class Ball implements GameObject {
         int value = Math.min(15, Math.abs(val));
         if (val < 0 ) value = value * -1;
         MouvementX = value;
-        Log.v("Arkanoid - Ball", "MouvementX : " + String.valueOf(value));
-
     }
 
     public int getMouvementY() {
@@ -62,16 +60,17 @@ public class Ball implements GameObject {
     public boolean getdirectionX() {
         return directionX;
     }
+
     public void setdirectionX(boolean val) {
         this.directionX = val;
-        Log.v("Arkanoid - Ball", "setdirectionX to " + String.valueOf(val));
     }
+
     public boolean getdirectionY() {
         return directionY;
     }
+
     public void setdirectionY(boolean val) {
         this.directionY = val;
-        Log.v("Arkanoid - Ball", "setdirectionY to " + String.valueOf(val));
     }
 
     @Override
@@ -87,29 +86,25 @@ public class Ball implements GameObject {
     private void movetheball(Point point){
         int x;
         int y;
-        String txt="";
 
-        if (this.directionX == true) {
+        if (this.directionX) {
             x = point.x - MouvementX;
         }else{
             x = point.x + MouvementX;
-        };
-        if (this.directionY == true) {
+        }
+
+        if (this.directionY) {
             y = point.y - MouvementY;
         }else{
             y = point.y + MouvementY;
-        };
+        }
 
-        txt = "   Ball move  FROM (" + String.valueOf(point.x) + "," + String.valueOf(point.y) + ")  TO (";
         point.set(x,y);
-        txt = txt  + String.valueOf(x) + "," + String.valueOf(y) + ")";
-        //Log.v("Arkanoid Ball", txt);
     }
 
     public void update(Point point){
         movetheball(point);
         cercle.set(point.x, point.y);
-        //Log.v("Michel", "                               Vraiement ? ( "+ String.valueOf(point.x) + "," + String.valueOf(point.y) + ")");
     }
 
 }

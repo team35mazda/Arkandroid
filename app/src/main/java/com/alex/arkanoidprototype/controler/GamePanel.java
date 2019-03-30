@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -27,32 +28,44 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private Level level;
     private Ball ball;
     private Point ballPoint;
+    private SoundController soundController;
+    private ControlListener controlListener;
 
     private static int LevelStartPosY = 100;
     private static int SliderStartPosX = 500;
     private static int SliderStartPosY = 1200;
 
-    // MOI ###############################################################
     private MainActivity mainactivity;
     private static int xOffset = 10;    // For the slider speed.
     public static int pointX = 500;
     public static int pointY = 1200;
     public static int screenWidth;
-    // fin MOI ###########################################################
-
 
     public GamePanel(Context context){
         super(context);
-
         getHolder().addCallback(this);
+        this.initGamePanel(context);
+    }
 
+    public GamePanel(Context context, AttributeSet attrs){
+        super(context, attrs);
+        getHolder().addCallback(this);
+        this.initGamePanel(context);
+    }
+
+    public GamePanel(Context context, AttributeSet attrs, int defStyle){
+        super(context, attrs, defStyle);
+        getHolder().addCallback(this);
+        this.initGamePanel(context);
+    }
+
+    private void initGamePanel(Context context){
         thread = new MainThread(getHolder(), this);
 
         slider = new Slider(new Rect(0,0,200,75), Color.rgb(255,0,0));
         sliderPoint = new Point(SliderStartPosX,SliderStartPosY);
         //level = new Level(1);
 
-        // MOI ###############################################################
         WindowManager wm = (WindowManager) context.getSystemService(context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -63,7 +76,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         mainactivity = new MainActivity();
         sliderPoint = new Point(pointX, pointY);
         level = new Level(3, size);
-        // fin MOI ###########################################################
 
         int sliderCenter;
         //TODO: mettre le rayon comme variable syst�me
@@ -74,13 +86,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         ballPoint = new Point(sliderCenter, SliderStartPosY-ballrayon);
         ball = new Ball(ballPoint, Color.rgb(102,135,255)); //
 
-//        ball.draw(canvas);
-
-//        detect_collision(canvas);
         setFocusable(true);
 
-        Log.v("Arkanoid - GamePanel", "----- NEW START -----");
-
+        //Création du contrôleur de sons du jeu
+        soundController = new SoundController(context);
+        //Création de l'ecouteur d'evenements de senseurs
+        controlListener = new ControlListener(context,this);
     }
 
     @Override
@@ -123,10 +134,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update(){
-        //slider.update(sliderPoint);
+        slider.update(sliderPoint);
         //sliderPoint.set((int)this.getX(),(int)this.getY());
 		ball.update(ballPoint);
-        sliderUpdate();
+        //sliderUpdate();
     }
 
     private int Get_New_Mouvement(){
@@ -170,9 +181,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 break;
         }
 
-        Log.v("Arkanoid - GamePanel", "Rebond sur plaque Direction ("+ball.getdirectionX()+")   Old Mouvement : " + oldMouvement + ", New Mouvement : " + ret + " |   plaquePos  : " + plaquePos + "    Balle : " + Position + "    SeptiemeDePlaque  : " + SeptiemeDePlaque);
-
-        return ret;
+         return ret;
     }
 
     private void detect_collision(Canvas canvas){
@@ -191,6 +200,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if ((ballpoint.y+ball.getrayon() >= slider.getRect().top) && (ballpoint.y-ball.getrayon() < slider.getRect().top)) {
             //On est sur le slider ?
             if ((ballpoint.x-ball.getrayon()/2 >= slider.getRect().left) && (ballpoint.x+ball.getrayon()/2 <= slider.getRect().right)) {
+
+                this.soundController.playSliderHitSound(); //Son de la balle sur le slider
+
                 ball.setdirectionY(true);
                 // Correction du mouvement selon l'arriver sur la plaque, le rebond sur le Slider, on doit changer la direction de la balle
                 //    7 Emplacements    La base : pareil au rebond sur un mur, on rebondit en changeant d'axe seulement
@@ -207,14 +219,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         BlockHit bhit = new BlockHit();
         level.DetectBlockHit(bhit, ballPoint, ball.getdirectionX(), ball.getdirectionY(), ball.getMouvementX(), ball.getMouvementY(), ball.getrayon());
         if (bhit.getHitByY()) {
-            Log.v("Arkanoid - GamePanel", "GamePanel deteck Block bhit.getHitByY() : " + String.valueOf(!ball.getdirectionY()));
+
+            this.soundController.playBlockHitSound(); //son de la balle sur un block
 
             ball.setdirectionY(!ball.getdirectionY());
 //            if (bhit.HitByTop ) ball.setdirectionY(true);
 //            if (bhit.HitByBottom ) ball.setdirectionY(false);
         }
         if (bhit.getHitByX()){
-            Log.v("Arkanoid - GamePanel", "GamePanel deteck Block bhit.getHitByX() : " + String.valueOf(!ball.getdirectionX()));
+
+            this.soundController.playBlockHitSound();
 
             ball.setdirectionX(!ball.getdirectionX());
 //            if (bhit.HitByLeft ) ball.setdirectionX(true);
@@ -236,9 +250,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         detect_collision(canvas);
     }
 
-    // MOI ###############################################################
     // This function is in the GamePanel class because I think it has easy access to objects *?*
-    public void sliderUpdate(){
+    public void sliderPointUpdate(int tourner){
 
         if ((sliderPoint.x < 0) || (sliderPoint.x > screenWidth)) {
             if (sliderPoint.x < 0) {
@@ -249,13 +262,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 }
             }
         } else {
-            if (mainactivity.get_tourner() == 0) {
+            if (tourner == 0) {
                 sliderPoint.offset(0, 0);
             } else {
-                if (mainactivity.get_tourner() == 1) {
+                if (tourner == 1) {
                     sliderPoint.offset(xOffset, 0);
                 } else {
-                    if (mainactivity.get_tourner() == -1) {
+                    if (tourner == -1) {
                         sliderPoint.offset(xOffset*(-1), 0);
                     } else {
                         sliderPoint.offset(0, 0);   // Si erreur, ne rien faire.
@@ -263,7 +276,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 }
             }
         }
-        slider.update(sliderPoint);
+        //slider.update(sliderPoint);
     }
-    // fin MOI ###########################################################
+
+    public ControlListener getControlListener(){
+        return controlListener;
+    }
+
 }
