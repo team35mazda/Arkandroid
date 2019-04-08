@@ -1,10 +1,16 @@
 package com.alex.arkanoidprototype.controler;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
@@ -13,6 +19,7 @@ import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
 
+import com.alex.arkanoidprototype.R;
 import com.alex.arkanoidprototype.model.BlockHit;
 import com.alex.arkanoidprototype.model.Level;
 import com.alex.arkanoidprototype.model.Slider;
@@ -40,6 +47,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static int pointX = 500;
     public static int pointY = 1200;
     public static int screenWidth;
+    public static int screenHeight;
+    public int actualLevel = 3;
+    private Paint paint;
+    private Bitmap levelBackground;
 
     public GamePanel(Context context){
         super(context);
@@ -71,11 +82,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         Point size = new Point();
         display.getSize(size);
         screenWidth = size.x;
+        screenHeight = size.y;
 
-//        slider = new Slider(new Rect(50,50,200,100), Color.rgb(255,0,0));
+        // Choisir le bon background selon le niveau.
+        setBackground(actualLevel);
+
+        // slider = new Slider(new Rect(50,50,200,100), Color.rgb(255,0,0));
         mainactivity = new MainActivity();
         sliderPoint = new Point(pointX, pointY);
-        level = new Level(3, size);
+        level = new Level(actualLevel, size);
 
         int sliderCenter;
         //TODO: mettre le rayon comme variable syst�me
@@ -241,7 +256,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas){
         super.draw(canvas);
 
-        canvas.drawColor(Color.WHITE);
+        //canvas.drawColor(Color.TRANSPARENT);
+        canvas.drawBitmap(levelBackground, 0, 0, paint);
 
         slider.draw(canvas);
         level.draw(canvas);
@@ -283,4 +299,31 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         return controlListener;
     }
 
+
+    public void setBackground(int level){
+
+        int x = screenWidth;
+        int y = screenHeight;
+
+        String name = "background" + String.valueOf(level);
+        Resources resources = getContext().getResources();
+        int resourceId = resources.getIdentifier(name, "drawable", getContext().getPackageName());
+
+        paint = new Paint();
+        //Bitmap myBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background3);
+        Bitmap myBitmap = BitmapFactory.decodeResource(getResources(), resourceId);
+
+        int outWidth;
+        int outHeight;
+        int inWidth = myBitmap.getWidth();
+        int inHeight = myBitmap.getHeight();
+        if(inWidth > inHeight){
+            outWidth = x;
+            outHeight = (inHeight * x) / inWidth;
+        } else {
+            outHeight = y;
+            outWidth = (inWidth * y) / inHeight;
+        }
+        levelBackground = Bitmap.createScaledBitmap(myBitmap, outWidth, outHeight, false);
+    }
 }

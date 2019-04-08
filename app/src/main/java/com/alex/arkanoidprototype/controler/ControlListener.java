@@ -17,6 +17,7 @@ public class ControlListener implements SensorEventListener {
     private long lastUpdate = 0;
     private float last_x, last_y, last_z;
     private  int tourner = 0;  // -1: gauche, 0: statique, 1: droite
+    private static int sensorRange = 2; // Pour donner une imprecision a l'etat statique.
 
     public ControlListener(Context context, GamePanel gamePanel){
         this.context = context;
@@ -43,6 +44,35 @@ public class ControlListener implements SensorEventListener {
 
                 //float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;//PAS UTILISÉ?!?!
 
+                if (portrait){
+                    if (x > sensorRange) {
+                        tourner = -1;
+                    } else {
+                        if (x < (-1*sensorRange)) {
+                            tourner = 1;
+                        } else {
+                            tourner = 0;
+                        }
+                    }
+                    last_x = x;
+                    last_y = y;
+                    last_z = z;
+                } else {
+                    if (y > 0) {
+                        tourner = 1;
+                    } else {
+                        if (y < 0) {
+                            tourner = -1;
+                        } else {
+                            tourner = 0;
+                        }
+
+                        last_x = y;
+                        last_y = x;
+                        last_z = z;
+                    }
+                }
+                /*
                 if (portrait){
                     if (x > 0) {
                         tourner = -1;
@@ -71,6 +101,7 @@ public class ControlListener implements SensorEventListener {
                         last_z = z;
                     }
                 }
+                */
             }
         }
 
