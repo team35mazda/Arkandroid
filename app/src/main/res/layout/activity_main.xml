@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/userProfilLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="horizontal"
@@ -13,37 +14,66 @@
 
         <TextView
             android:id="@+id/appName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/appName"
             android:textAllCaps="true"
             android:textStyle="bold|italic"
-            android:textSize="20dp"
-            android:layout_weight="50"/>
+            android:textSize="20sp"
+
+            />
+        <TextView
+            android:id="@+id/message"
+            android:text="@string/letsBattle"
+            android:textAllCaps="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/leveltitle"
+            android:text="@string/levelTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/appName"
+            />
+        <TextView
+            android:id="@+id/level"
+            android:text="*"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/leveltitle"
+            android:layout_alignRight="@id/leveltitle"
+
+            />
         <TextView
             android:id="@+id/lifeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="@string/lifeTitle"/>
+            android:text="@string/lifeTitle"
+            android:layout_toRightOf="@id/leveltitle"/>
         <TextView
             android:id="@+id/life"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/life"
-            android:textStyle="bold"
-            android:layout_weight="10"/>
+            android:text="*"
+
+            android:layout_alignRight="@id/lifeTitle"
+            android:layout_below="@id/lifeTitle"
+
+            />
 
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
-    <com.alex.arkanoidprototype.controler.GamePanel
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.alex.arkanoidprototype.controler.GamePanel xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/game_panel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="95"/>
+        android:layout_weight="95" />
 
 
 </LinearLayout>

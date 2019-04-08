@@ -12,11 +12,11 @@ import android.util.Log;
 
 public class Ball implements GameObject {
 
-    private static int def_rayon = 30;
+
     private static int def_MouvementX = 3;
     private static int def_MouvementY = 5;
 
-    private int rayon = def_rayon;
+    private int rayon;
     private int MouvementX = def_MouvementX;
     private int MouvementY = def_MouvementY;
 
@@ -25,8 +25,9 @@ public class Ball implements GameObject {
     private boolean directionX;
     private boolean directionY;
 
-    public Ball (Point p , int color){
+    public Ball (Point p , int color, int rayon){
         cercle = new Point(p.x, p.y);
+        this.rayon = rayon;
         paint = new Paint();
         paint.setColor(color);
         directionX = true;
@@ -47,6 +48,13 @@ public class Ball implements GameObject {
         int value = Math.min(15, Math.abs(val));
         if (val < 0 ) value = value * -1;
         MouvementX = value;
+    }
+
+    public void resetDirection(){
+        MouvementX = def_MouvementX;
+        MouvementY = def_MouvementY;
+        directionX = true;
+        directionY = true;
     }
 
     public int getMouvementY() {

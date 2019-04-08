@@ -26,25 +26,17 @@ public class Level {
     private int BLOCK_HEIGHT = def_BLOCK_HEIGHT;
 
 
-
-
-
-
-
-    //public Level(int levelNumber) {
-    // MOI ###############################################################
     public Level(int levelNumber, Point pointSize) {
-    // fin MOI ###########################################################
+
         this.levelNumber = levelNumber;
         assembly = new Block[LEVEL_WIDTH][LEVEL_HEIGHT];
 
-        //constructRandomLevel();
-        // MOI ###############################################################
+
         constructLevel(levelNumber, pointSize);
-        // fin MOI ###########################################################
+
     }
 
-    // MOI ###############################################################
+
     private void constructLevel(int levelNumber, Point pointSize){
         Point point = new Point();
         float screenWidth = pointSize.x;
@@ -83,7 +75,7 @@ public class Level {
         }
     }
 
-    public int[][][] getLevel_1(){
+    private int[][][] getLevel_1(){
         int [][][] level_1 = new int [LEVEL_WIDTH][LEVEL_HEIGHT][3];
         for (int i = 0; i < LEVEL_WIDTH; i++){
             for (int j = 0; j < LEVEL_HEIGHT; j++){
@@ -102,7 +94,7 @@ public class Level {
         return level_1;
     }
 
-    public int[][][] getLevel_2(){
+    private int[][][] getLevel_2(){
         int [][][] level_2 = new int [LEVEL_WIDTH][LEVEL_HEIGHT][3];
         for (int i = 0; i < LEVEL_WIDTH; i++){
             for (int j = 0; j < LEVEL_HEIGHT; j++){
@@ -125,7 +117,7 @@ public class Level {
         return level_2;
     }
 
-    public int[][][] getLevel_3(){
+    private int[][][] getLevel_3(){
         int [][][] level_2 = new int [LEVEL_WIDTH][LEVEL_HEIGHT][3];
         for (int i = 0; i < LEVEL_WIDTH; i++){
             for (int j = 0; j < LEVEL_HEIGHT; j++){
@@ -150,39 +142,12 @@ public class Level {
         return level_2;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private void constructRandomLevel(){
 
         Point point = new Point();
 
-        for (int y=0;y<LEVEL_HEIGHT;y++){
-            for (int x=0;x<LEVEL_WIDTH;x++){
+        for (int y=0;y<1;y++){
+            for (int x=0;x<1;x++){
                 point.set((x*BLOCK_WIDTH)+75,(y*BLOCK_HEIGHT)+startPosition);
                 int r = ThreadLocalRandom.current().nextInt(0, 254 + 1);
                 int g = ThreadLocalRandom.current().nextInt(0, 254 + 1);
@@ -218,7 +183,7 @@ public class Level {
     }
 
     public BlockHit DetectBlockHit(BlockHit bhit, Point cercle, boolean directionX, boolean directionY, int MouvementX, int MouvementY, int rayon){
-        boolean hit = false;
+
 
         search:
         {
@@ -227,8 +192,6 @@ public class Level {
                     assembly[x][y].ballHit(bhit, cercle, directionX, directionY, MouvementX, MouvementY, rayon);
                     if (bhit.getHit()) {
                         Rect r = assembly[x][y].getRect();
-                        Log.v("Arkanoid - Level", "Block[" + String.valueOf(x) + "][" + String.valueOf(y) + "] (" + String.valueOf(r.left) + "," + String.valueOf(r.top) + "," + String.valueOf(r.right) + "," + String.valueOf(r.bottom) + ")  |   Ball (" + String.valueOf(cercle.x) + "," + String.valueOf(cercle.y) + ")  |   Hit by {" + String.valueOf(bhit.getHitByLeft()) + " " + String.valueOf(bhit.getHitByTop())  + " " + String.valueOf(bhit.getHitByRigth()) + " " + String.valueOf(bhit.getHitByBottom()) + "}");
-                        hit = true;
                         break search;
                     }
                 }
@@ -236,5 +199,22 @@ public class Level {
         }
 
         return bhit;
+    }
+
+    public boolean allBlocksHit(){
+        boolean completed = true;
+
+        for (int y = 0; y < LEVEL_HEIGHT; y++) {
+            for (int x = 0; x < LEVEL_WIDTH; x++) {
+                if (assembly[x][y].isVisible()){
+                    completed = false;
+                    break;
+
+                }
+            }
+        }
+
+        return completed;
+
     }
 }

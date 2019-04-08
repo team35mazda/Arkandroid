@@ -10,6 +10,7 @@ class MainThread extends Thread{
     private GamePanel gamePanel;
     private boolean running;
     public static Canvas canvas;
+    private boolean state;
 
     public void setRunning(boolean running){
         this.running = running;
@@ -19,6 +20,7 @@ class MainThread extends Thread{
         super();
         this.surfaceHolder = holder;
         this.gamePanel = gamePanel;
+        this.state = true;
     }
 
     @Override
@@ -37,8 +39,10 @@ class MainThread extends Thread{
             try{
                 canvas = this.surfaceHolder.lockCanvas();
                 synchronized (surfaceHolder){
-                    this.gamePanel.update();
-                    this.gamePanel.draw(canvas);
+                    if(state) {
+                        this.gamePanel.update();
+                        this.gamePanel.draw(canvas);
+                    }
                 }
 
             }catch(Exception e){e.printStackTrace();}
@@ -72,4 +76,9 @@ class MainThread extends Thread{
             }
         }
     }
+
+    public void runningState(boolean state){
+        this.state = state;
+    }
 }
+
