@@ -2,6 +2,8 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textSize">10sp</item>
+        <item name="android:layout_margin">3sp</item>
         <!-- Customize your theme here. -->
     </style>
 
