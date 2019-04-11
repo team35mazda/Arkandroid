@@ -2,10 +2,16 @@ package com.alex.arkanoidprototype.controler;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.StringDef;
 import android.support.annotation.StringRes;
 import android.util.AttributeSet;
@@ -52,6 +58,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static int pointX = 500;
     public static int pointY = 1200;
     public static int screenWidth;
+    public static int screenHeight;
+    public int actualLevel = 3;
+    private Paint paint;
+    private Bitmap levelBackground;
 
     public static int ballRayon = 30;
 
@@ -88,9 +98,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         this.size = new Point();
         display.getSize(size);
         screenWidth = size.x;
+        screenHeight = size.y;
 
+
+        setBackground(actualLevel);
         this.setObjectsInCanevas();
-
 
         setFocusable(true);
 
@@ -256,7 +268,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas){
         super.draw(canvas);
 
-        canvas.drawColor(Color.WHITE);
+        //canvas.drawColor(Color.TRANSPARENT);
+        canvas.drawBitmap(levelBackground, 0, 0, paint);
 
         if (level.allBlocksHit()){
             this.userProfile.levelUp();
@@ -315,6 +328,33 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         return controlListener;
     }
 
+    public void setBackground(int level){
+
+        int x = screenWidth;
+        int y = screenHeight;
+
+        String name = "background" + String.valueOf(level);
+        Resources resources = getContext().getResources();
+        int resourceId = resources.getIdentifier(name, "drawable", getContext().getPackageName());
+
+        paint = new Paint();
+        //Bitmap myBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background3);
+        Bitmap myBitmap = BitmapFactory.decodeResource(getResources(), resourceId);
+
+        int outWidth;
+        int outHeight;
+        int inWidth = myBitmap.getWidth();
+        int inHeight = myBitmap.getHeight();
+        if(inWidth > inHeight){
+            outWidth = x;
+            outHeight = (inHeight * x) / inWidth;
+        } else {
+            outHeight = y;
+            outWidth = (inWidth * y) / inHeight;
+        }
+        levelBackground = Bitmap.createScaledBitmap(myBitmap, outWidth, outHeight, false);
+    }
+  
     public void gameOver(){
 
         userProfile.resetLife();
@@ -348,7 +388,4 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         ballPoint = new Point(sliderPoint.x,sliderPoint.y + ballRayon);
         ball = new Ball(ballPoint, Color.rgb(102,135,255),ballRayon);
     }
-
-
-
 }
