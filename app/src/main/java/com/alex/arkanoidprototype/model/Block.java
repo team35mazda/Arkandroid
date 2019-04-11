@@ -84,6 +84,10 @@ public class Block implements GameObject {
 
     }
 
+    public boolean isVisible() {
+        return visible;
+    }
+
     public void update(Point point){
 
         //rectangle.set(point.x - rectangle.width()/2, 1200, point.x + rectangle.width()/2, 1250);

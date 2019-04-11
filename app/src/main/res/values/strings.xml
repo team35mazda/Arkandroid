@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">ArkanoidPrototype</string>
     <string name="appName">Arkandroid</string>
-    <string name="lifeTitle">VIES:</string>
-    <string name="life">-</string>
+    <string name="lifeTitle">VIES</string>
+    <string name="life">3</string>
+    <string name="levelTitle">LEVEL</string>
+    <string name="gameover">gameover</string>
+    <string name="letsBattle">lets battle</string>
+    <string name="patate">patate</string>
 </resources>
