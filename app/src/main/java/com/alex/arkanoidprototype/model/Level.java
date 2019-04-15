@@ -25,18 +25,53 @@ public class Level {
     private int BLOCK_WIDTH = def_BLOCK_WIDTH;
     private int BLOCK_HEIGHT = def_BLOCK_HEIGHT;
 
-
     public Level(int levelNumber, Point pointSize) {
 
         this.levelNumber = levelNumber;
         assembly = new Block[LEVEL_WIDTH][LEVEL_HEIGHT];
+    //    constructLevel(levelNumber, pointSize);
+        constructLevel(pointSize);
+    }
 
+    public void setAssembly(Block[][] assembly) {
+        this.assembly = assembly;
+    }
 
-        constructLevel(levelNumber, pointSize);
+    public Block[][] getAssembly() {
+        return assembly;
+    }
 
+    private void constructLevel(Point pointSize){
+        Point point = new Point();
+        float screenWidth = pointSize.x;
+        float screenHeight = pointSize.y;
+
+//        int[][][] thisLevel = getLevel(levelNumber);
+        int blockWidth = (int)Math.floor(screenWidth)/LEVEL_WIDTH;
+        int blockHeight = (int)(Math.floor(screenHeight)*0.15/LEVEL_HEIGHT);
+
+        for (int y=0;y<LEVEL_HEIGHT;y++){
+            for (int x=0;x<LEVEL_WIDTH;x++){
+                point.set((x*blockWidth)+75,(y*blockHeight)+200);
+
+  //              int r = thisLevel[x][y][0];
+  //              int g = thisLevel[x][y][1];
+  //              int b = thisLevel[x][y][2];
+  //              int color = Color.rgb(r,g,b);
+
+                assembly[x][y] = new Block(new Rect(0,0,blockWidth,blockHeight),Color.rgb(255,255,255),x+1,y+1);
+                assembly[x][y].update(point);
+            }
+        }
+        load();
     }
 
 
+
+
+
+
+/*
     private void constructLevel(int levelNumber, Point pointSize){
         Point point = new Point();
         float screenWidth = pointSize.x;
@@ -55,11 +90,12 @@ public class Level {
                 int b = thisLevel[x][y][2];
                 int color = Color.rgb(r,g,b);
 
-                assembly[x][y] = new Block(new Rect(0,0,blockWidth,blockHeight),color);
+                assembly[x][y] = new Block(new Rect(0,0,blockWidth,blockHeight),color,x+1,y+1);
                 assembly[x][y].update(point);
             }
         }
     }
+
 
     public int[][][] getLevel(int levelNumber){
 
@@ -155,11 +191,12 @@ public class Level {
 
                 int color = Color.rgb(r,g,b);
 
-                assembly[x][y] = new Block(new Rect(0,0,BLOCK_WIDTH,BLOCK_HEIGHT),color);
+                assembly[x][y] = new Block(new Rect(0,0,BLOCK_WIDTH,BLOCK_HEIGHT),color, x+1, y+1);
                 assembly[x][y].update(point);
             }
         }
     }
+*/
 
     public void draw(Canvas canvas){
 
@@ -171,7 +208,7 @@ public class Level {
             assembly = new Block[this.LEVEL_WIDTH][LEVEL_HEIGHT];
 
             this.startPosition = (int)round(canvas.getHeight()*0.1); // ON arriche � 10% de la hauteur
-            constructRandomLevel();
+  //          constructRandomLevel();
         }
 
         Paint paint = new Paint();
@@ -209,12 +246,28 @@ public class Level {
                 if (assembly[x][y].isVisible()){
                     completed = false;
                     break;
-
                 }
             }
         }
-
         return completed;
-
     }
+
+    /// load form base de données
+    private void load() {
+        for (int y = 0; y < LEVEL_HEIGHT; y++) {
+            for (int x = 0; x < LEVEL_WIDTH; x++) {
+                assembly[x][y].load(levelNumber);
+            }
+        }
+    }
+
+    public void save(){
+        for (int y = 0; y < LEVEL_HEIGHT; y++) {
+            for (int x = 0; x < LEVEL_WIDTH; x++) {
+                assembly[x][y].save(levelNumber);
+            }
+        }
+    }
+
+
 }

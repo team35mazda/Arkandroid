@@ -1,1 +1,1 @@
-Important : Emulateur Nexus 5 avec API-23
+Important : Pixel 2 XL avec API-28

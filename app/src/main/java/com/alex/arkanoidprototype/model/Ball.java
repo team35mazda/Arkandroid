@@ -15,6 +15,9 @@ public class Ball implements GameObject {
 
     private static int def_MouvementX = 3;
     private static int def_MouvementY = 5;
+    public static int defautPointX = 500;
+    public static int defautPointY = 1200;
+    public  static int defautRayon = 30;
 
     private int rayon;
     private int MouvementX = def_MouvementX;
@@ -24,6 +27,15 @@ public class Ball implements GameObject {
     private Paint paint;
     private boolean directionX;
     private boolean directionY;
+
+    public Ball (){
+        cercle = new Point(defautPointX, defautPointY + defautRayon);
+        this.rayon = defautRayon;
+        paint = new Paint();
+        paint.setColor(Color.rgb(102,135,255));
+        directionX = true;
+        directionY = true;
+    }
 
     public Ball (Point p , int color, int rayon){
         cercle = new Point(p.x, p.y);
@@ -114,5 +126,21 @@ public class Ball implements GameObject {
         movetheball(point);
         cercle.set(point.x, point.y);
     }
+
+    // Charger le default de la base de données
+    private void loadNew() {
+
+    }
+
+    // Charger la valeur courante de la base de données
+    private void LoadState() {
+
+    }
+
+    // Sauvegarder dans la base de données
+    private void SaveState(){
+
+    }
+
 
 }

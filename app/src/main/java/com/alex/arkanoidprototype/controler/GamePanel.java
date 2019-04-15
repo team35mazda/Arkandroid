@@ -25,6 +25,11 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.alex.arkanoidprototype.R;
+import com.alex.arkanoidprototype.database.Couleur;
+import com.alex.arkanoidprototype.database.Niveau;
+import com.alex.arkanoidprototype.database.NiveauItem;
+import com.alex.arkanoidprototype.database.Position;
+import com.alex.arkanoidprototype.model.Block;
 import com.alex.arkanoidprototype.model.BlockHit;
 import com.alex.arkanoidprototype.model.Level;
 import com.alex.arkanoidprototype.model.Slider;
@@ -33,11 +38,12 @@ import com.alex.arkanoidprototype.model.UserProfile;
 
 import org.w3c.dom.Text;
 
+import java.util.List;
+
 import static java.lang.Math.round;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private MainThread thread;
-
     private Slider slider;
     private Point sliderPoint;
     private Level level;
@@ -45,25 +51,47 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private Point ballPoint;
     private SoundController soundController;
     private ControlListener controlListener;
-    private int sliderCenter;
     private UserProfile userProfile;
     private boolean runningState;
     private Point size;
 
-    private static int LevelStartPosY = 100;
-    private static int SliderStartPosX = 500;
-    private static int SliderStartPosY = 1200;
-
     private static int xOffset = 10;    // For the slider speed.
-    public static int pointX = 500;
-    public static int pointY = 1200;
     public static int screenWidth;
     public static int screenHeight;
-    public int actualLevel = 3;
     private Paint paint;
     private Bitmap levelBackground;
 
-    public static int ballRayon = 30;
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
+    }
+
+    public Slider getSlider() {
+        return slider;
+    }
+
+    public void setSlider(Slider slider) {
+        this.slider = slider;
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
+    }
+
+    public Ball getBall() {
+        return ball;
+    }
+
+    public void setBall(Ball ball) {
+        this.ball = ball;
+    }
 
     public GamePanel(Context context){
         super(context);
@@ -87,11 +115,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         thread = new MainThread(getHolder(), this);
         runningState = true;
 
-        slider = new Slider(new Rect(0,0,200,75), Color.rgb(255,0,0));
-        sliderPoint = new Point(SliderStartPosX,SliderStartPosY);
-
         //Définition du profil usager initial
-        userProfile = new UserProfile(1,3);
+        userProfile = new UserProfile();
 
         WindowManager wm = (WindowManager) context.getSystemService(context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -100,8 +125,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         screenWidth = size.x;
         screenHeight = size.y;
 
-
-        setBackground(actualLevel);
         this.setObjectsInCanevas();
 
         setFocusable(true);
@@ -251,9 +274,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         //-------------- Tappe en bas de l'écran-------------------
         if ((ballpoint.y + ball.getrayon() > canvas.getHeight())){
             ball.setdirectionY(!ball.getdirectionY());
-            this.ballPoint = new Point(sliderPoint.x,sliderPoint.y + ballRayon);
-            this.sliderPoint = new Point(pointX, pointY);
+            this.ball = new Ball();
             this.ball.resetDirection();
+            ballPoint = ball.getpoint();
             this.update();
 
             if (userProfile.lostLife()){
@@ -378,14 +401,26 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     }
 
-    private void setObjectsInCanevas(){
-        sliderPoint = new Point(pointX, pointY);
+    public void setObjectsInCanevas(){
+
+        // Création des éléments
+        setBackground(userProfile.getActualLevel());
+        slider = new Slider();
+        ball = new Ball();
         level = new Level(userProfile.getActualLevel(), size);
 
-        sliderCenter = slider.getRect().right - slider.getRect().left; //Size du slider
-        sliderCenter = round(sliderCenter / 2) - ballRayon;
+        sliderPoint = slider.getpoint();
+        ballPoint = ball.getpoint();
 
-        ballPoint = new Point(sliderPoint.x,sliderPoint.y + ballRayon);
-        ball = new Ball(ballPoint, Color.rgb(102,135,255),ballRayon);
     }
+
+
+    public void GamePanelRunningState(boolean runningState)
+    {
+        thread.runningState(runningState);
+    }
+
+
+
+
 }
